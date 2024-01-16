@@ -17,6 +17,13 @@ async function runDatabase(thatName) {
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'api-key');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
   const apiKey = req.headers['api-key'];
   if (!apiKey || apiKey !== process.env.API_KEY) {
