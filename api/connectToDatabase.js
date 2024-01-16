@@ -16,6 +16,8 @@ async function runDatabase(thatName) {
 }
 
 module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
   const apiKey = req.headers['api-key'];
   if (!apiKey || apiKey !== process.env.API_KEY) {
     res.status(403).send('Forbidden');
