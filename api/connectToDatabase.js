@@ -3,7 +3,7 @@ const uri = process.env.MONGODB_URI;
 
 const client = new MongoClient(uri);
 
-async function runDatabase(thatName, thatRoll, thatReg) {
+async function runDatabase(thatName, thatRoll, thatReg, thatDate) {
   try {
     await client.connect();
     const database = client.db("Students");
@@ -26,6 +26,13 @@ async function runDatabase(thatName, thatRoll, thatReg) {
       me = await collection
         .find({
           regNumber: `${thatReg}`,
+        })
+        .toArray();
+      return me;
+    } else if (thatDate != undefined) {
+      me = await collection
+        .find({
+          birthDate: { $regex: `^${thatDate}` },
         })
         .toArray();
       return me;
@@ -57,7 +64,8 @@ module.exports = async (req, res) => {
     const thatName = req.query.name;
     const thatRoll = req.query.roll;
     const thatReg = req.query.reg;
-    const value = await runDatabase(thatName, thatRoll, thatReg);
+    const thatDate = req.query.date;
+    const value = await runDatabase(thatName, thatRoll, thatReg, thatDate);
     if (value === null) {
       res.status(404).send("Not found");
     } else {
