@@ -11,7 +11,7 @@ async function runDatabase(thatName, thatRoll, thatReg, thatDate) {
     if (thatName != undefined) {
       me = await collection
         .find({
-          name: { $regex: `^${thatName}` },
+          name: { $regex: `.*${thatName}.*` },
         })
         .toArray();
       return me;
